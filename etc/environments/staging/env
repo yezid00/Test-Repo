@@ -1,0 +1,9 @@
+DEBUG=false
+SITE_URL=http://test-project.dabdev.net
+APP_NAME=test_project
+NODE_ENV=production
+SECRET_KEY="vspxmfhh^whb__hs(h1nop@l)-d#q*k8clc(-lf!ka(r@si8hi"
+ALLOWED_HOSTS=test-project.dabdev.net
+
+IMAGESERVICEKEY=XQzsHEQALGfPHf8D4
+

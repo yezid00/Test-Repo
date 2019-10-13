@@ -1,0 +1,31 @@
+{% load static from staticfiles %}
+{% load raven %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>
+    test_project
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <script src="https://cdn.ravenjs.com/3.23.2/raven.min.js" crossorigin="anonymous"></script>
+  
+    <link rel="stylesheet" href="{% static 'css/bundle.css' %}" charset="utf-8">
+  
+</head>
+<body>
+
+  
+    {% block content %}
+      <div id="app" class="app"></div>
+    {% endblock %}
+
+    {% block javascript %}
+      <script>Raven.config('{% sentry_public_dsn %}').install()</script>
+      <script charset="utf-8" type="text/javascript" src="{% static 'js/bundle.js' %}"></script>
+    {% endblock %}
+  
+
+</body>
+</html>

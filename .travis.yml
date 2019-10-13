@@ -1,0 +1,38 @@
+sudo: false
+
+language: python
+
+dist: xenial
+python: "3.7.1"
+
+addons:
+    postgresql: "9.4"
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - node_modules
+    - $HOME/.pyenv_cache
+
+env:
+  global:
+    - DATABASE_URL=postgres://localhost/test_project
+    - EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+    - S3_BUCKET_NAME='cats_test-project'
+    - AWS_ACCESS_KEY_ID='secret_key'
+    - AWS_SECRET_ACCESS_KEY='access_key'
+    - SECRET_KEY=cat_test-project
+    - IN_TEST=true
+
+before_install:
+  - |
+    wget https://github.com/praekeltfoundation/travis-pyenv/releases/download/0.4.0/setup-pyenv.sh
+    source setup-pyenv.sh
+
+install:
+  - ./build
+
+before_script:
+  - psql -c 'create database test_project;' -U postgres
+
+script: ./runtests

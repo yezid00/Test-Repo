@@ -1,0 +1,62 @@
+#!/bin/bash
+
+frontend_nvm() {
+    # set NVM_DIR if not set
+    if [ -z "$NVM_DIR" ]
+    then
+        NVM_DIR="$HOME/.nvm"
+    fi
+
+    echo "attempting to set up nvm"
+    if [ -e $NVM_DIR/nvm.sh ]; then
+        . $NVM_DIR/nvm.sh --no-use
+    else
+        echo "Can't find nvm.sh, maybe we're a mac running brew? let's try that..."
+        . "$(brew --prefix nvm)/nvm.sh" --no-use
+    fi
+
+    echo "nvm install"
+    nvm install
+    echo "nvm use"
+    nvm use
+}
+
+frontend_npm() {
+    npm install
+    npm run build
+    if [ "$CLEANUP_AFTER_BUILD" == "true" ]
+    then
+        rm -rf node_modules/
+    fi
+}
+
+backend_pyenv() {
+    if hash pyenv 2>/dev/null;
+    then
+        echo "using pyenv wrapper"
+        pyenv install --skip-existing
+        pyenv exec python -m venv env
+    else
+        echo "using 'python -m venv env'"
+        python -m venv env
+    fi
+}
+
+wait_for_bg_jobs_to_end() {
+    FAIL=0
+    for job in `jobs -p`
+    do
+        echo $job
+        wait $job || let "FAIL+=1"
+    done
+
+    echo $FAIL
+
+    if [ "$FAIL" == "0" ];
+    then
+        echo "All BG jobs ok"
+    else
+        echo "Some BG jobs failed! ($FAIL)"
+        exit 1
+    fi
+}

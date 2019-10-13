@@ -1,0 +1,97 @@
+{
+  "name": "test-project",
+  "version": "0.0.1",
+  "description": "Testing the set up of a new project",
+  "main": "static/build/js/index.js",
+  "scripts": {
+    "build": "npm run build-dirs && npm run build-js && npm run build-less",
+    "build-dirs": "mkdir -p static/build/js",
+    "build-js": "webpack --mode production",
+    "watch-js": "webpack --mode development --watch",
+    "build-less": "lessc static/src/less/index.less static/build/css/bundle.css --silent && postcss --map --use autoprefixer --use cssnano -r static/build/css/bundle.css",
+    "watch-less": "watch-less-do-more -u autoprefixer -i static/src/less/index.less -o static/build/css/bundle.css",
+    "prettier-check": "./scripts/prettier-check",
+    "prettier": "prettier --write \"static/src/{ts,__tests__}/**/*.{ts,tsx,js,jsx}\"",
+    "lint-js": "tsc --noEmit --project tsconfig.json && eslint 'static/src/**/*.{js,jsx}' && tslint --project tsconfig.json 'static/src/**/*.{ts,tsx}' -e 'static/src/ts/types/**'",
+    "lint": "npm run prettier-check && npm run lint-js",
+    "tests": "jest",
+    "test": "npm run lint && npm run tests -- --coverage --runInBand"
+  },
+  "dependencies": {
+    "@dabapps/create-webpack-config": "^0.0.0",
+    "@dabapps/roe": "^0.9.19",
+    "@types/react": "^16.4.7",
+    "@types/react-dom": "^16.0.6",
+    "@types/react-redux": "^6.0.5",
+    "autoprefixer": "^9.1.2",
+    "cssnano": "^4.0.5",
+    "less": "^2.7.3",
+    "normalize.css": "^8.0.0",
+    "postcss": "^6.0.23",
+    "postcss-cli": "^5.0.1",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "typescript": "^2.9.2",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.1.13",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
+    "@types/jest": "^23.3.1",
+    "@types/react-test-renderer": "^16.0.1",
+    "enzyme": "^3.4.4",
+    "enzyme-adapter-react-16": "^1.2.0",
+    "enzyme-to-json": "^3.3.4",
+    "eslint": "^3.19.0",
+    "eslint-config-dabapps": "github:dabapps/eslint-config-dabapps#v3.2.1",
+    "jest": "^23.5.0",
+    "prettier": "^1.14.2",
+    "react-test-renderer": "^16.4.1",
+    "ts-jest": "^23.1.3",
+    "tslint": "^5.11.0",
+    "tslint-config-dabapps": "github:dabapps/tslint-config-dabapps#v0.5.1",
+    "watch-less-do-more": "^0.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dabapps/test-project.git"
+  },
+  "author": "DabApps",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/dabapps/test-project/issues"
+  },
+  "homepage": "https://github.com/dabapps/test-project#readme",
+  "jest": {
+    "collectCoverageFrom": [
+      "static/src/ts/**/*.(js|jsx|ts|tsx)"
+    ],
+    "setupFiles": [
+      "<rootDir>/static/src/__tests__/helpers/setup.ts"
+    ],
+    "transform": {
+      "^.+\\.[jt]sx?$": "ts-jest"
+    },
+    "testRegex": "static/.*(__tests__/.*|\\.(test|spec))\\.(js|jsx|ts|tsx)$",
+    "testPathIgnorePatterns": [
+      "<rootDir>/static/src/__tests__/helpers/"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx"
+    ],
+    "testURL": "http://localhost",
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "moduleNameMapper": {
+      "\\^(.+)": "<rootDir>/static/src/ts$1"
+    }
+  }
+}

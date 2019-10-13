@@ -1,0 +1,10 @@
+DEBUG=true
+DATABASE_URL=postgres://localhost/test_project
+SITE_URL=http://test-project.ctf.sh
+APP_NAME=test_project
+SECRET_KEY="mz8q+7pcitzzqzuj2eh3ri^i^o-hjjh_7f3tdyjpnlo-djhj^3"
+ALLOWED_HOSTS=*
+ALLOW_WEAK_PASSWORDS=False
+
+IMAGESERVICEKEY=XQzsHEQALGfPHf8D4
+

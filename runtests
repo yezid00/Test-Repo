@@ -1,0 +1,91 @@
+#!/bin/bash
+
+. ./scripts_common
+
+set -e
+
+
+frontend_npm_test() {
+    npm test
+}
+
+
+frontend() {
+
+    frontend_nvm
+    frontend_npm_test
+
+}
+
+backend_env_vars() {
+    export PATH=env/bin:${PATH}
+    export DEBUG=true
+    export IN_TEST=true
+    export FILE_STORAGE='django.core.files.storage.FileSystemStorage'
+}
+
+backend_mypy() {
+    echo "--------------"
+    echo "Running python type checking"
+    mypy --ignore-missing-imports project
+    echo "Ok!"
+}
+
+backend_flake8() {
+    echo ''
+    echo 'Running flake8'
+    flake8 project --extend-ignore=E128,E501 --exclude="migrations,settings,*/wsgi.py"
+    echo 'OK'
+}
+
+backend_check_migrations() {
+    if [ "$NO_MIGRATIONS" != "true" ]
+    then
+    ./manage.py makemigrations --dry-run --check # fail if makemigrations hasn't been run
+    fi
+}
+
+backend_tests_with_coverage() {
+    coverage run --source=project --omit='*/wsgi.py,*/settings.py,*/migrations/*.py,*__init__*,*/tests.py' manage.py test --noinput $TEST_ARGS
+    if [ $# -eq 0 ]
+    then
+        echo ''
+        coverage report
+        coverage html
+    fi
+    echo ''
+}
+
+backend() {
+    backend_env_vars
+    backend_mypy
+    # backend_flake8
+    backend_check_migrations
+    backend_tests_with_coverage
+}
+
+TEST_ARGS=$@
+if [ "$PARALLEL_BUILD_AND_TEST" == "true" ]
+then
+    if [ "$SKIP_FRONTEND_TESTS" != "true" ]
+    then
+        frontend &
+    fi
+
+    if [ "$SKIP_BACKEND_TESTS" != "true" ]
+    then
+        backend &
+    fi
+
+    wait_for_bg_jobs_to_end
+else
+    if [ "$SKIP_FRONTEND_TESTS" != "true" ]
+    then
+        frontend
+    fi
+
+    if [ "$SKIP_BACKEND_TESTS" != "true" ]
+    then
+        backend
+    fi
+fi

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+. ./scripts_common
+
+set -e
+
+frontend() {
+
+    frontend_nvm
+    frontend_npm
+
+}
+
+backend_pip() {
+    env/bin/pip install -r requirements.txt
+}
+
+backend_collectstatic() {
+    env/bin/python manage.py collectstatic --noinput
+}
+
+backend() {
+    backend_pyenv
+    backend_pip
+    backend_collectstatic
+}
+
+if [ "$PARALLEL_BUILD_AND_TEST" == "true" ]
+then
+    frontend &
+    backend &
+    wait_for_bg_jobs_to_end
+else
+    frontend
+    backend
+fi

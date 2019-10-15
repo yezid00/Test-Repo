@@ -22,7 +22,6 @@ backend_collectstatic() {
 backend() {
     backend_pyenv
     backend_pip
-    backend_collectstatic
 }
 
 if [ "$PARALLEL_BUILD_AND_TEST" == "true" ]

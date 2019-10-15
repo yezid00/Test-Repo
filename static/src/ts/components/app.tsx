@@ -31,7 +31,7 @@ export class App extends PureComponent<Props> {
       <AppRoot>
         <NavBar>
           <Container>
-            <strong>Title</strong>
+            <strong>Home</strong>
           </Container>
         </NavBar>
         <SideBar

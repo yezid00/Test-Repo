@@ -1,4 +1,4 @@
-DEBUG=true
+DEBUG=True
 DATABASE_URL=postgres://localhost/test_project
 SITE_URL=http://test-project.ctf.sh
 APP_NAME=test_project

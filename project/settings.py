@@ -26,6 +26,7 @@ env = environ.Env(
     RAVEN_DSN=(str, ''),
     SECRET_KEY=(str, ''),
     DATABASE_URL=(str, ''),
+    USER=(str, ''),
 )
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -112,9 +113,8 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=env('DATABASE_URL'),
-        conn_max_age=300 
-        
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=300
     )
 }
 
